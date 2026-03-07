@@ -7,7 +7,7 @@ import { FaTiktok } from "react-icons/fa"
 
 function Footer() {
   return (
-    <Container className='py-6 px-20 bg-gray-300 dark:bg-muted rounded-t-2xl'>
+    <Container className='py-5 px-5 md:px-20 bg-gray-300 dark:bg-muted rounded-t-2xl'>
       <footer>
         <section className='flex justify-between'>
           <div className='social  flex-col justify-center items-start gap-4 hidden md:flex'>

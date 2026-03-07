@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/Navbar"
 import Container from "@/components/global/Container"
 import Providers from "./providers"
 import Footer from "@/components/footer/Footer"
+import { ClerkProvider } from "@clerk/nextjs"
 
 const geoFont = Noto_Sans_Georgian({
   subsets: ["latin"],
@@ -22,20 +23,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang='en'
-      className={`${geoFont.className} antialiased `}
-      suppressHydrationWarning
-    >
-      <body className='leading-6 bg-background text-foreground '>
-        <Providers>
-          <Navbar />
-          <Container className='pt-15 flex flex-col min-h-screen mb-15 '>
-            {children}
-          </Container>
-          <Footer />
-        </Providers>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang='en'
+        className={`${geoFont.className} antialiased `}
+        suppressHydrationWarning
+      >
+        <body className='leading-6 bg-background text-foreground '>
+          <Providers>
+            <Navbar />
+            <Container className='pt-15 flex flex-col min-h-screen mb-15 '>
+              {children}
+            </Container>
+            <Footer />
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

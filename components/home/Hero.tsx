@@ -27,6 +27,7 @@ function Hero() {
             src='https://res.cloudinary.com/dwpheghzv/image/upload/v1772631955/image_dv71cc.png'
             width={140}
             height={150}
+            className='h-auto'
           />
         </div>
       </div>

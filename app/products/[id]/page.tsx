@@ -20,9 +20,9 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
           <Image
             src={image}
             alt={name}
-            width={800}
-            height={800}
-            className=' rounded object-contain'
+            width={700}
+            height={700}
+            className='h-auto rounded object-contain'
           />
         </div>
         {/* PRODUCT INFO SECOND COL */}

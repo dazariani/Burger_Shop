@@ -9,6 +9,8 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-require-imports": "off",
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/exhaustive-deps": "off",
+      "@next/next/no-img-element": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
   ...nextVitals,
