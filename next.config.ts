@@ -1,11 +1,6 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  outputFileTracingIncludes: {
-    "/api/**/*": ["./node_modules/.prisma/client/**/*"],
-
-    "/*": ["./node_modules/.prisma/client/**/*"],
-  },
   /* config options here */
   images: {
     remotePatterns: [
@@ -18,6 +13,9 @@ const nextConfig: NextConfig = {
         hostname: "img.clerk.com",
       },
     ],
+  },
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/.prisma/client/**/*"],
   },
 }
 
