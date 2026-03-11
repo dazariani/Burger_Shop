@@ -10,6 +10,7 @@ export const links: NavLink[] = [
   { href: "/favorites", label: "ფავორიტები" },
   { href: "/cart", label: "კალათა" },
   { href: "/orders", label: "შეკვეთები" },
+  { href: "/admin/sales", label: "მართვა" },
 ]
 
 export const aboutText = `
@@ -21,3 +22,9 @@ export const aboutText = `
 ეს არის ადგილი მათთვის, ვისაც ნამდვილი ბურგერი უყვარს.
 გემო, რომელიც ლაპარაკობს თავად.
 `
+
+export const adminLinks: NavLink[] = [
+  { href: "/admin/sales", label: "გაყიდვები" },
+  { href: "/admin/products", label: "ჩემი პროდუქტები" },
+  { href: "/admin/products/create", label: "პროდუქტის დამატება" },
+]

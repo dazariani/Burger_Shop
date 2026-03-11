@@ -12,8 +12,12 @@ import { Button } from "../ui/button"
 import { links } from "@/utils/links"
 import UserIcon from "./UserIcon"
 import SignOutLink from "./SignOutLink"
+import { auth } from "@clerk/nextjs/server"
 
-function LinksDropdown() {
+async function LinksDropdown() {
+  const { userId } = await auth()
+  const isAdmin = userId === process.env.ADMIN_USER_ID
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,13 +32,17 @@ function LinksDropdown() {
         sideOffset={10}
       >
         <Show fallback={ShowSignedOut()} when='signed-in'>
-          {links.map((link) => (
-            <DropdownMenuItem key={link.href} asChild>
-              <Link href={link.href} className='capitalize w-full'>
-                {link.label}
-              </Link>
-            </DropdownMenuItem>
-          ))}
+          {links.map((link) => {
+            if (!isAdmin && link.label === "მართვა") return null
+            return (
+              <DropdownMenuItem key={link.href} asChild>
+                <Link href={link.href} className='capitalize w-full'>
+                  {link.label}
+                </Link>
+              </DropdownMenuItem>
+            )
+          })}
+
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <div className='w-full'>
@@ -69,9 +77,9 @@ function ShowSignedOut() {
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem>
-        <SignInButton mode='modal'>
+        <SignUpButton mode='modal'>
           <button className='w-full text-left'>რეგისტრაცია</button>
-        </SignInButton>
+        </SignUpButton>
       </DropdownMenuItem>
     </>
   )

@@ -1,56 +1,11 @@
-import { v2 as cloudinary } from "cloudinary"
-import { NextResponse } from "next/server"
+"use server"
+
 import db from "@/utils/db"
 import { redirect } from "next/navigation"
 import products from "@/prisma/products"
-
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
-
-export const createProduct = async (formData: FormData) => {
-  "use server"
-  const name = formData.get("name") as string
-  const imageFile = formData.get("image") as File
-
-  const result = (await uploadImage(imageFile)) as { secureUrl: string }
-
-  console.log("Image upload result:", result.secureUrl)
-  // if (result.secureUrl) {
-  //   const product = await db.product.create({
-  //     data: {
-  //       name,
-  //       image: result.secureUrl,
-  //     },
-  //   })
-  //   if (product) {
-  //     redirect("/products") // Redirect to the products page after successful creation
-  //   }
-  // }
-}
-
-const uploadImage = async (imageFile: File) => {
-  const buffer = await imageFile.arrayBuffer()
-
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader
-      .upload_stream(
-        { resource_type: "auto", folder: "Burger_app" }, // Cloudinary will auto-detect file type
-        (error, result) => {
-          if (error) {
-            console.error(error)
-            reject(error)
-          } else {
-            resolve({ secureUrl: result?.secure_url })
-          }
-        },
-      )
-      .end(Buffer.from(buffer)) // End the stream with the buffer
-    return uploadStream
-  })
-}
+import { currentUser } from "@clerk/nextjs/server"
+import { productSchema, validateWithZodSchema } from "./schemas"
+import { uploadImage } from "@/utils/cloudinary"
 
 export const createProductFromList = async () => {
   "use server"
@@ -71,7 +26,7 @@ export const fetchFeaturedProducts = async () => {
   return products
 }
 
-export const fetchAllProducts = ({ search = "" }: { search: string }) => {
+export const fetchAllProducts = async ({ search = "" }: { search: string }) => {
   return db.product.findMany({
     where: {
       OR: [{ name: { contains: search, mode: "insensitive" } }],
@@ -92,4 +47,64 @@ export const fetchSingleProduct = async (productId: string) => {
     redirect("/")
   }
   return product
+}
+
+const renderError = (error: unknown) => {
+  if (error instanceof Error) {
+    return { message: error.message }
+  }
+  return { message: "something went wrong" }
+}
+
+const getAuthUser = async () => {
+  const user = await currentUser()
+  if (!user) {
+    return redirect("/")
+  }
+  return user
+}
+
+const getAdminUser = async () => {
+  const user = await getAuthUser()
+  if (user.id !== process.env.ADMIN_USER_ID) redirect("/")
+  return user
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const createProductAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  const user = await getAuthUser()
+
+  try {
+    const rawData = Object.fromEntries(formData)
+
+    const validatedFields = validateWithZodSchema(productSchema, rawData)
+
+    const imageFile = formData.get("image") as File
+
+    const result = (await uploadImage(imageFile)) as { secureUrl: string }
+
+    await db.product.create({
+      data: {
+        ...validatedFields,
+        image: result.secureUrl,
+        clerkId: user.id,
+      },
+    })
+  } catch (error) {
+    return renderError(error)
+  }
+  redirect("/admin/products")
+}
+
+export const fetchAdminProducts = async () => {
+  await getAdminUser()
+  const products = db.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+  return products
 }
