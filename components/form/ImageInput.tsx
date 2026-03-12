@@ -1,7 +1,7 @@
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 
-function ImageInput() {
+function ImageInput({ required = true }: { required?: boolean }) {
   const name = "image"
 
   return (
@@ -9,7 +9,13 @@ function ImageInput() {
       <Label htmlFor={name} className='capitalize'>
         სურათი
       </Label>
-      <Input id={name} name={name} type='file' required accept='image/*' />
+      <Input
+        id={name}
+        name={name}
+        type='file'
+        required={required}
+        accept='image/*'
+      />
     </div>
   )
 }

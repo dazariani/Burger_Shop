@@ -1,0 +1,14 @@
+import { Skeleton } from "../ui/skeleton"
+
+function LoadingTable({ rows = 5 }: { rows?: number }) {
+  const tableRows = Array.from({ length: rows }, (_, ind) => {
+    return (
+      <div className='mb-4' key={ind}>
+        <Skeleton className='w-full h-8 rounded' />
+      </div>
+    )
+  })
+
+  return <>{tableRows}</>
+}
+export default LoadingTable

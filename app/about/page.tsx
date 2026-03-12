@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { aboutText } from "../../utils/links"
+import Link from "next/link"
 
 function AboutPage() {
   return (
