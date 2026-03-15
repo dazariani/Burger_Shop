@@ -21,3 +21,65 @@ export type CartState = {
   tax: number
   orderTotal: number
 }
+
+export type ReviewAndProduct = {
+  product: {
+    clerkId: string
+    id: string
+    name: string
+    description: string
+    featured: boolean
+    price: number
+    category: string
+    image: string
+    createdAt: Date
+    updatedAt: Date
+  }
+} & {
+  authorName: string
+  authorImageUrl: string
+  rating: number
+  comment: string
+  productId: string
+  clerkId: string
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type Review = {
+  authorName: string
+  authorImageUrl: string
+  rating: number
+  comment: string
+  productId: string
+  clerkId: string
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type productReviews = ({
+  reviews: {
+    productId: string
+    clerkId: string
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    authorName: string
+    authorImageUrl: string
+    rating: number
+    comment: string
+  }[]
+} & {
+  clerkId: string
+  id: string
+  name: string
+  description: string
+  featured: boolean
+  price: number
+  category: string
+  image: string
+  createdAt: Date
+  updatedAt: Date
+})[]

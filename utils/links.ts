@@ -8,6 +8,7 @@ export const links: NavLink[] = [
   { href: "/about", label: "ჩვენ შესახებ" },
   { href: "/products", label: "პროდუქტები" },
   { href: "/favorites", label: "ფავორიტები" },
+  { href: "/reviews", label: "მიმოხილვა" },
   { href: "/cart", label: "კალათა" },
   { href: "/orders", label: "შეკვეთები" },
   { href: "/admin/sales", label: "მართვა" },

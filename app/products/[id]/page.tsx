@@ -4,10 +4,17 @@ import Image from "next/image"
 import FavoriteToggleButton from "@/components/products/FavoriteToggleButton"
 import AddToCart from "@/components/single-product/AddToCart"
 import ProductRating from "@/components/single-product/ProductRating"
+import SubmitReview from "@/components/reviews/SubmitReview"
+import ProductReviews from "@/components/reviews/ProductReviews"
+import { currentUser } from "@clerk/nextjs/server"
+import { fetchProductReviews } from "@/utils/actions"
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const { id } = await params
+  const user = await currentUser()
   const product = await fetchSingleProduct(id)
+  const reviews = await fetchProductReviews(product.id)
+  const hasReview = reviews.some((rev) => rev.clerkId === user?.id)
 
   const { name, image, description, price } = product
 
@@ -40,6 +47,8 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
           <AddToCart productId={id} />
         </div>
       </div>
+      <ProductReviews reviews={reviews} />
+      {!hasReview && <SubmitReview productId={id} />}
     </section>
   )
 }
