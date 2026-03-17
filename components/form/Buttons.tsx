@@ -32,8 +32,7 @@ export function SubmitButton({
     >
       {pending ? (
         <>
-          <IoReload className='animate-spin mr-2 h-4 w-4' />
-          Please wait...
+          <IoReload className='animate-spin mr-2 h-4 w-full' />
         </>
       ) : (
         text
@@ -100,5 +99,15 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
         <FaRegHeart />
       )}
     </Button>
+  )
+}
+
+export const ProductSignInButton = () => {
+  return (
+    <SignInButton mode='modal'>
+      <Button type='button' className='mt-8 capitalize'>
+        კალათაში დამატება
+      </Button>
+    </SignInButton>
   )
 }

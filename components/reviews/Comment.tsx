@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 function Comment({ commentText }: { commentText: string }) {
   const [isHidden, setIsHidden] = useState(true)
@@ -15,12 +15,14 @@ function Comment({ commentText }: { commentText: string }) {
     <div>
       <div className='text-sm'>
         {text}
-        <span
-          className='cursor-pointer text-blue-500'
-          onClick={() => setIsHidden(!isHidden)}
-        >
-          {isHidden ? "see more" : "see less"}
-        </span>
+        {commentLength > 300 && (
+          <span
+            className='cursor-pointer text-blue-500'
+            onClick={() => setIsHidden(!isHidden)}
+          >
+            {isHidden ? "see more" : "see less"}
+          </span>
+        )}
       </div>
     </div>
   )
