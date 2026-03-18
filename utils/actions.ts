@@ -122,7 +122,7 @@ export const deleteProductAction = async (prevState: { productId: string }) => {
 
     await deleteImage(deletedProduct.image)
     revalidatePath("/admin/products")
-    return { message: "Product deleted successfully" }
+    return { message: "პროდუქტი წარმატებით წაიშალა" }
   } catch (error) {
     return renderError(error)
   }
@@ -167,7 +167,7 @@ export const updateProductAction = async (
     if (newImgFile.size > 0) deleteImage(currentImage)
 
     revalidatePath(`/admin/products/${productId}/edit`)
-    return { message: "Product updated successfully" }
+    return { message: "პროდუქტი წარმატებით განახლდა" }
   } catch (error) {
     return renderError(error)
   }
@@ -212,7 +212,7 @@ export const toggleFavoriteAction = async (prevState: {
       })
     }
     revalidatePath(pathname)
-    return { message: favoriteId ? "removed" : "added" }
+    return { message: favoriteId ? "წაიშალა" : "დაემატა" }
   } catch (error) {
     return renderError(error)
   }
@@ -248,7 +248,7 @@ export const createReviewAction = async (
       },
     })
     revalidatePath(`/products/${validatedFields.productId}`)
-    return { message: "review submitted successfully" }
+    return { message: "მიმოხილვა წარმატებით დაემატა" }
   } catch (error) {
     return renderError(error)
   }
@@ -289,7 +289,7 @@ export const deleteReviewAction = async (
       },
     })
     revalidatePath("/reviews")
-    return { message: "review removed successfully" }
+    return { message: "მიმოხილვა წარმატებით წაიშალა" }
   } catch (error) {
     return renderError(error)
   }
@@ -311,6 +311,8 @@ export const fetchProductRating = async ({
   })
   return productReviews
 }
+
+// Cart actions
 
 export const fetchCartItems = async () => {
   const userId = (await auth()).userId
@@ -456,7 +458,7 @@ export const addToCartAction = async (prevState: any, formData: FormData) => {
     // forth step
     await updateCart(cart)
     revalidatePath("/cart")
-    return { message: "Product added to cart" }
+    return { message: "პროდუქტი დაემატა კალათაში" }
   } catch (error) {
     return renderError(error)
   }
@@ -482,7 +484,7 @@ export const removeCartItemAction = async (
     })
     await updateCart(cart)
     revalidatePath("/cart")
-    return { message: "Item removed from cart" }
+    return { message: "პროდუქტი წაიშალა" }
   } catch (error) {
     return renderError(error)
   }
@@ -513,12 +515,74 @@ export const updateCartItemAction = async ({
     })
     await updateCart(cart)
     revalidatePath("/cart")
-    return { message: "Cart updated" }
+    return { message: "კალათა განახლდა" }
   } catch (error) {
     return renderError(error)
   }
 }
 
+// Order actions
+
 export const createOrderAction = async (prevState: any, formData: FormData) => {
-  return { message: "order created" }
+  const user = await getAuthUser()
+
+  let orderId: null | string = null
+  let cartId: null | string = null
+
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    })
+    cartId = cart.id
+
+    await db.order.deleteMany({
+      where: {
+        clerkId: user.id,
+        isPaid: false,
+      },
+    })
+
+    const order = await db.order.create({
+      data: {
+        clerkId: user.id,
+        products: cart.numItemsInCart,
+        orderTotal: cart.orderTotal,
+        tax: cart.tax,
+        shipping: cart.shipping,
+        email: user.emailAddresses[0].emailAddress,
+      },
+    })
+    orderId = order.id
+  } catch (error) {
+    return renderError(error)
+  }
+  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`)
+}
+
+export const fetchUserOrders = async () => {
+  const user = await getAuthUser()
+  const orders = await db.order.findMany({
+    where: {
+      clerkId: user.id,
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+  return orders
+}
+
+export const fetchAdminOrders = async () => {
+  await getAdminUser()
+  const orders = await db.order.findMany({
+    where: {
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+  return orders
 }
