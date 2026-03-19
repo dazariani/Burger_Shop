@@ -19,20 +19,15 @@ function CheckoutPage() {
   const cartId = searchParams.get("cartId")
 
   const fetchClientSecret = useCallback(async () => {
-    if (orderId && cartId) {
-      const response = await axios.post("/api/payment", {
-        orderId,
-        cartId,
-      })
-      return response.data.clientSecret
-    }
-  }, [orderId, cartId])
+    const response = await axios.post("/api/payment", {
+      orderId,
+      cartId,
+    })
+    return response.data.clientSecret
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const options = { fetchClientSecret }
-
-  if (!orderId || !cartId) {
-    return null
-  }
 
   return (
     <div id='checkout'>
