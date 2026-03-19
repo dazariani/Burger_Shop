@@ -1,4 +1,5 @@
 "use client"
+export const dynamic = "force-dynamic"
 
 import * as React from "react"
 import { LuMoon, LuSun } from "react-icons/lu"
