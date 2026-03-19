@@ -11,11 +11,11 @@ async function CartPage() {
 
   const previousCart = await fetchOrCreateCart({ userId })
   const cart = await updateCart(previousCart)
-  if (cart.numItemsInCart === 0) return <SectionTitle text='Empty Cart' />
+  if (cart.numItemsInCart === 0) return <SectionTitle text='კალათა ცარიელია' />
 
   return (
     <>
-      <SectionTitle text='Shopping Cart' />
+      <SectionTitle text='კალათა' />
       <div className='mt-8 grid gap-4 lg:grid-cols-12'>
         <div className='lg:col-span-8'>
           <CartItemsList cartItems={cart.cartItems} />

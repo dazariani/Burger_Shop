@@ -23,7 +23,7 @@ async function ProductsContainer({
       <section>
         <div className='flex justify-between items-center'>
           <h4 className='font-medium text-lg'>
-            {totalProducts} products{totalProducts > 1 && "s"}
+            <span className='text-blue-500'>{totalProducts}</span> პროდუქტი
           </h4>
           <div className='flex gap-x-4'>
             <Button
