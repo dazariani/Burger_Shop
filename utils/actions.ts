@@ -71,7 +71,6 @@ const getAdminUser = async () => {
   return user
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export const createProductAction = async (
   prevState: any,
   formData: FormData,
