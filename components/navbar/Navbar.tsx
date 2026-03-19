@@ -16,7 +16,9 @@ function Navbar() {
         </Suspense>
         <div className='flex gap-4 items-center'>
           <CartButton />
-          <DarkMode />
+          <Suspense fallback={<div>...</div>}>
+            <DarkMode />
+          </Suspense>
           <LinksDropdown />
         </div>
       </Container>
