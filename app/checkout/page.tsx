@@ -8,6 +8,7 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
+import { apiCall } from "@/components/global/serverFunctions"
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
@@ -20,10 +21,7 @@ function CheckoutPage() {
   const cartId = searchParams.get("cartId")
 
   const fetchClientSecret = useCallback(async () => {
-    const response = await axios.post("/api/payment", {
-      orderId,
-      cartId,
-    })
+    const response = await apiCall(orderId as string, cartId as string)
     return response.data.clientSecret
   }, [orderId, cartId])
 
