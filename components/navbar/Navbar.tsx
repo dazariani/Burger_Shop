@@ -5,23 +5,25 @@ import LinksDropdown from "./LinksDropdown"
 import Logo from "./Logo"
 import NavSearch from "./NavSearch"
 import { Suspense } from "react"
+import ProductNavigation from "./ProductNavigation"
 
 function Navbar() {
   return (
     <nav className='border-b'>
       <Container className='flex flex-col sm:flex-row sm:justify-between sm:items-center flex-wrap py-8 gap-4'>
-        <Logo />
         <Suspense fallback={<div>Loading...</div>}>
+          <Logo />
           <NavSearch />
-        </Suspense>
-        <div className='flex gap-4 items-center'>
-          <CartButton />
-          <Suspense fallback={<div>...</div>}>
+
+          <div className='flex gap-4 items-center'>
+            <CartButton />
+
             <DarkMode />
-          </Suspense>
-          <LinksDropdown />
-        </div>
+            <LinksDropdown />
+          </div>
+        </Suspense>
       </Container>
+      <ProductNavigation />
     </nav>
   )
 }

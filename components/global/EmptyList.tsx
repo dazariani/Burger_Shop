@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 function EmptyList({
-  heading = "No items found",
+  heading = "ჩანაწერი ვერ მოიძებნა",
   className,
 }: {
   heading?: string

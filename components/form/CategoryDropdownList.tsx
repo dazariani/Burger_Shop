@@ -30,9 +30,6 @@ function CategoryDropdownList({
         <option className='bg-background' value='ტაკო & ბურიტო'>
           ტაკო & ბურიტო
         </option>
-        <option className='bg-background' value='გარნირები & სალათები'>
-          გარნირები & სალათები
-        </option>
         <option className='bg-background' value='სოუსი'>
           სოუსი
         </option>

@@ -14,6 +14,28 @@ async function ProductsContainer({
   search: string
 }) {
   const products = await fetchAllProducts({ search })
+  // sort by category
+  const burgers = products.filter((product) => product.category === "ბურგერი")
+  const hotDogs = products.filter((product) => product.category === "ჰოთ-დოგი")
+  const tacos = products.filter(
+    (product) => product.category === "ტაკო & ბურიტო",
+  )
+  const salads = products.filter(
+    (product) => product.category === "გარნირები და სალათები",
+  )
+  const souces = products.filter((product) => product.category === "სოუსი")
+  const softDrinks = products.filter(
+    (product) => product.category === "სასმელები",
+  )
+
+  const categories = [
+    { id: "burger", name: "ბურგერი", products: burgers },
+    { id: "hotdog", name: "ჰოთ-დოგი", products: hotDogs },
+    { id: "taco", name: "ტაკო & ბურიტო", products: tacos },
+    { id: "souce", name: "სოუსი", products: souces },
+    { id: "drink", name: "სასმელები", products: softDrinks },
+  ]
+
   const totalProducts = products.length
   const searchTerm = search ? `&search=${search}` : ""
 
@@ -52,13 +74,35 @@ async function ProductsContainer({
       {/* PRODUCTS */}
       <div>
         {totalProducts === 0 ? (
-          <h5 className='text-2xl mt-16'>
-            Sorry, no products matched your search...
-          </h5>
+          <h5 className='text-2xl mt-16'>პროდუქტი ვერ მოიძებნა...</h5>
         ) : layout === "grid" ? (
-          <ProductsGrid products={products} />
+          <>
+            {categories.map(
+              (category) =>
+                category.products.length > 0 && (
+                  <ProductsGrid
+                    key={category.name}
+                    products={category.products}
+                    sectionName={category.name}
+                    id={category.id}
+                  />
+                ),
+            )}
+          </>
         ) : (
-          <ProductsList products={products} />
+          <>
+            {categories.map(
+              (category) =>
+                category.products.length > 0 && (
+                  <ProductsList
+                    key={category.name}
+                    products={category.products}
+                    sectionName={category.name}
+                    id={category.id}
+                  />
+                ),
+            )}
+          </>
         )}
       </div>
     </>
