@@ -10,14 +10,16 @@ function ProductsGrid({
   id,
 }: {
   products: Product[]
-  sectionName: string
-  id: string
+  sectionName?: string
+  id?: string
 }) {
   return (
     <>
-      <h1 id={id} className='text-2xl mt-10'>
-        {sectionName}
-      </h1>
+      {sectionName && id && (
+        <h1 id={id} className='text-2xl mt-10'>
+          {sectionName}
+        </h1>
+      )}
       <div className='pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3 '>
         {products.map((product) => {
           const { name, price, image } = product
